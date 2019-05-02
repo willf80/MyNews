@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">MyNews</string>
+
+    <string name="tab_name_top_stories">Top stories</string>
+    <string name="tab_name_most_popular">Most popular</string>
+    <string name="tab_name_business">Business</string>
 </resources>
