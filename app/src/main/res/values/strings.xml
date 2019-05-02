@@ -4,4 +4,9 @@
     <string name="tab_name_top_stories">Top stories</string>
     <string name="tab_name_most_popular">Most popular</string>
     <string name="tab_name_business">Business</string>
+
+    <string name="menu_item_notifications">Notifications</string>
+    <string name="menu_item_help">Help</string>
+    <string name="menu_item_about">About</string>
+    <string name="menu_item_search">Search</string>
 </resources>
