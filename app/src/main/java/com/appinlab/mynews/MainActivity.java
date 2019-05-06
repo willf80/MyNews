@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.appinlab.mynews.fragments.ArticleFragment;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -63,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-            return new Fragment();
+            return ArticleFragment.newInstance("", "");
         }
 
         @Nullable
