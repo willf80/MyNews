@@ -1,5 +1,6 @@
 package com.appinlab.mynews;
 
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.appinlab.mynews.fragments.ArticleFragment;
 
@@ -51,6 +53,31 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return handleOptionsMenuActions(item.getItemId());
+    }
+
+    private boolean handleOptionsMenuActions(int menuItemId) {
+        switch (menuItemId) {
+            case R.id.app_bar_search:
+                openActivity(SearchArticleActivity.class);
+                return true;
+
+            case R.id.app_bar_notifications:
+                openActivity(NotificationsActivity.class);
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    private void openActivity(Class<?> cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
     }
 
     // Tabs pager adapter
