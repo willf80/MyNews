@@ -1,0 +1,5 @@
+<resources>
+    <declare-styleable name="ArticleFilterView">
+        <attr name="showDate" format="boolean|reference" />
+    </declare-styleable>
+</resources>
