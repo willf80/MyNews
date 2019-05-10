@@ -10,8 +10,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.appinlab.mynews.R;
-import com.appinlab.mynews.adapters.ArticleCategoryAdapter;
-import com.appinlab.mynews.models.ArticleCategory;
+import com.appinlab.mynews.adapters.CategoryAdapter;
+import com.appinlab.mynews.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +21,8 @@ public class ArticleFilterView extends LinearLayout {
 
     private RecyclerView mRecyclerView;
     private LinearLayout mDateFilterLayout;
-    private ArticleCategoryAdapter mArticleCategoryAdapter;
-    private List<ArticleCategory> mArticleCategories;
+    private CategoryAdapter mCategoryAdapter;
+    private List<Category> mArticleCategories;
 
     public ArticleFilterView(Context context) {
         super(context);
@@ -46,12 +46,12 @@ public class ArticleFilterView extends LinearLayout {
 
         mArticleCategories = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
-            mArticleCategories.add(new ArticleCategory());
+            mArticleCategories.add(new Category());
         }
-        mArticleCategoryAdapter = new ArticleCategoryAdapter(mArticleCategories);
+        mCategoryAdapter = new CategoryAdapter(mArticleCategories);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        mRecyclerView.setAdapter(mArticleCategoryAdapter);
+        mRecyclerView.setAdapter(mCategoryAdapter);
 
         // Load attributes
         final TypedArray a = getContext().obtainStyledAttributes(
@@ -79,12 +79,12 @@ public class ArticleFilterView extends LinearLayout {
         handleDate();
     }
 
-    public List<ArticleCategory> getArticleCategories() {
+    public List<Category> getArticleCategories() {
         return mArticleCategories;
     }
 
-    public void setArticleCategories(List<ArticleCategory> articleCategories) {
+    public void setArticleCategories(List<Category> articleCategories) {
         mArticleCategories = articleCategories;
-        mArticleCategoryAdapter.notifyDataSetChanged();
+        mCategoryAdapter.notifyDataSetChanged();
     }
 }
