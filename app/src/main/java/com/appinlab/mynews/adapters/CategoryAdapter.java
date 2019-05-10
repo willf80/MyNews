@@ -7,24 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.appinlab.mynews.R;
-import com.appinlab.mynews.models.ArticleCategory;
+import com.appinlab.mynews.models.Category;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 
-public class ArticleCategoryAdapter extends RecyclerView.Adapter<ArticleCategoryAdapter.ArticleCategoryItemViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ArticleCategoryItemViewHolder> {
 
-    private List<ArticleCategory> mArticleCategoryList;
+    private List<Category> mCategoryList;
 
-    public ArticleCategoryAdapter(List<ArticleCategory> articleCategoryList) {
-        mArticleCategoryList = articleCategoryList;
+    public CategoryAdapter(List<Category> categoryList) {
+        mCategoryList = categoryList;
     }
 
     @NonNull
     @Override
     public ArticleCategoryItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.article_category_item_view,
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.category_item_view,
                 viewGroup, false);
         return new ArticleCategoryItemViewHolder(view);
     }
@@ -36,7 +36,7 @@ public class ArticleCategoryAdapter extends RecyclerView.Adapter<ArticleCategory
 
     @Override
     public int getItemCount() {
-        return mArticleCategoryList.size();
+        return mCategoryList.size();
     }
 
     class ArticleCategoryItemViewHolder extends RecyclerView.ViewHolder {

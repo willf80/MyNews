@@ -1,4 +1,4 @@
 package com.appinlab.mynews.models;
 
-public class ArticleCategory {
+public class Category {
 }
