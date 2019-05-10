@@ -22,14 +22,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ArticleFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_CATEGORIE_NAME = "categoryName";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String mCategoryName;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -41,11 +36,10 @@ public class ArticleFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static ArticleFragment newInstance(String param1, String param2) {
+    public static ArticleFragment newInstance(String category) {
         ArticleFragment fragment = new ArticleFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_CATEGORIE_NAME, category);
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,8 +48,7 @@ public class ArticleFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mCategoryName = getArguments().getString(ARG_CATEGORIE_NAME);
         }
     }
 
@@ -72,7 +65,7 @@ public class ArticleFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         List<Article> articleList = new ArrayList<>();
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             articleList.add(new Article());
         }
 

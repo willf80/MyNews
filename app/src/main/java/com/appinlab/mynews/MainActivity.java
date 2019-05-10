@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.appinlab.mynews.fragments.ArticleFragment;
+import com.appinlab.mynews.utils.CategoryUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     // Define the different tabs page fragment
     public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-        static final int TAB_ELEMENT_COUNT = 3;
+        String [] allCategoryList = CategoryUtils.getAllCategoryList();
 
         TabsPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -92,28 +93,18 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int i) {
-            return ArticleFragment.newInstance("", "");
+            return ArticleFragment.newInstance(allCategoryList[i]);
         }
 
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return getString(R.string.tab_name_most_popular);
-
-                case 1:
-                    return getString(R.string.tab_name_top_stories);
-
-                case 2:
-                    return getString(R.string.tab_name_business);
-            }
-            return super.getPageTitle(position);
+            return allCategoryList[position];
         }
 
         @Override
         public int getCount() {
-            return TAB_ELEMENT_COUNT;
+            return allCategoryList.length;
         }
     }
 }
