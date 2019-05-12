@@ -1,11 +1,13 @@
 package com.appinlab.mynews.fragments;
 
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.appinlab.mynews.ArticleWebViewActivity;
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.adapters.AbstractArticleAdapter;
 import com.appinlab.mynews.adapters.MostPopularArticleAdapter;
@@ -20,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MostPopulateArticleFragment extends AbstractArticleFragment<MostPopularArticle> {
+public class MostPopulateArticleFragment extends AbstractArticleFragment<MostPopularArticle> implements AbstractArticleAdapter.OnDispatchListener<MostPopularArticle> {
 
     public static MostPopulateArticleFragment newInstance() {
         return new MostPopulateArticleFragment();
@@ -28,7 +30,7 @@ public class MostPopulateArticleFragment extends AbstractArticleFragment<MostPop
 
     @Override
     public AbstractArticleAdapter<MostPopularArticle> setAdapter(@NonNull List<MostPopularArticle> mostPopularArticles) {
-        return new MostPopularArticleAdapter(mostPopularArticles);
+        return new MostPopularArticleAdapter(mostPopularArticles, this);
     }
 
     @Override
@@ -59,5 +61,13 @@ public class MostPopulateArticleFragment extends AbstractArticleFragment<MostPop
                                       @NonNull Throwable t) {
                 }
             });
+    }
+
+    @Override
+    public void onItemClick(MostPopularArticle article) {
+        Intent intent = new Intent(getContext(), ArticleWebViewActivity.class);
+        intent.putExtra("url", article.getUrl());
+        intent.putExtra("title", article.getTitle());
+        startActivity(intent);
     }
 }

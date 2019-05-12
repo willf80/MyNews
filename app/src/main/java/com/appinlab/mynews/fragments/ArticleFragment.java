@@ -1,6 +1,7 @@
 package com.appinlab.mynews.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.appinlab.mynews.ArticleWebViewActivity;
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.adapters.AbstractArticleAdapter;
 import com.appinlab.mynews.adapters.ArticleAdapter;
@@ -33,7 +35,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ArticleFragment extends AbstractArticleFragment<Article> {
+public class ArticleFragment extends AbstractArticleFragment<Article> implements AbstractArticleAdapter.OnDispatchListener<Article> {
     private static final String ARG_CATEGORIE_NAME = "categoryName";
 
     private String mCategoryName;
@@ -63,7 +65,7 @@ public class ArticleFragment extends AbstractArticleFragment<Article> {
 
     @Override
     public AbstractArticleAdapter<Article> setAdapter(@NonNull List<Article> articles) {
-        return new ArticleAdapter(articles);
+        return new ArticleAdapter(articles, this);
     }
 
     @Override
@@ -98,5 +100,13 @@ public class ArticleFragment extends AbstractArticleFragment<Article> {
                                       @NonNull Throwable t) {
                 }
             });
+    }
+
+    @Override
+    public void onItemClick(Article article) {
+        Intent intent = new Intent(getContext(), ArticleWebViewActivity.class);
+        intent.putExtra("url", article.getUrl());
+        intent.putExtra("title", article.getTitle());
+        startActivity(intent);
     }
 }

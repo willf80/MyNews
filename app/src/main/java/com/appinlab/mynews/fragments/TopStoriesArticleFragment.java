@@ -1,10 +1,12 @@
 package com.appinlab.mynews.fragments;
 
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.appinlab.mynews.ArticleWebViewActivity;
 import com.appinlab.mynews.adapters.AbstractArticleAdapter;
 import com.appinlab.mynews.adapters.TopStoryArticleAdapter;
 import com.appinlab.mynews.api.ArticleStreams;
@@ -17,7 +19,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TopStoriesArticleFragment extends AbstractArticleFragment<TopStoryArticle> {
+public class TopStoriesArticleFragment extends AbstractArticleFragment<TopStoryArticle> implements AbstractArticleAdapter.OnDispatchListener<TopStoryArticle> {
 
     public static TopStoriesArticleFragment newInstance() {
         return new TopStoriesArticleFragment();
@@ -25,7 +27,7 @@ public class TopStoriesArticleFragment extends AbstractArticleFragment<TopStoryA
 
     @Override
     public AbstractArticleAdapter<TopStoryArticle> setAdapter(@NonNull List<TopStoryArticle> topStoryArticles) {
-        return new TopStoryArticleAdapter(topStoryArticles);
+        return new TopStoryArticleAdapter(topStoryArticles, this);
     }
 
     @Override
@@ -58,4 +60,11 @@ public class TopStoriesArticleFragment extends AbstractArticleFragment<TopStoryA
             });
     }
 
+    @Override
+    public void onItemClick(TopStoryArticle article) {
+        Intent intent = new Intent(getContext(), ArticleWebViewActivity.class);
+        intent.putExtra("url", article.getUrl());
+        intent.putExtra("title", article.getTitle());
+        startActivity(intent);
+    }
 }

@@ -1,6 +1,7 @@
 package com.appinlab.mynews.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.appinlab.mynews.ArticleWebViewActivity;
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.models.Image;
 import com.appinlab.mynews.models.Media;
@@ -24,9 +26,15 @@ import butterknife.ButterKnife;
 public abstract class AbstractArticleAdapter<T> extends RecyclerView.Adapter<AbstractArticleAdapter.ArticleItemViewHolder> {
 
     private List<T> mArticleList;
+    private OnDispatchListener<T> mOnDispatchListener;
 
-    AbstractArticleAdapter(List<T> articleList) {
+    public interface OnDispatchListener<T> {
+        void onItemClick(T article);
+    }
+
+    AbstractArticleAdapter(List<T> articleList, OnDispatchListener<T> onDispatchListener) {
         mArticleList = articleList;
+        mOnDispatchListener = onDispatchListener;
     }
 
     public void setArticleList(List<T> articleList) {
@@ -43,9 +51,16 @@ public abstract class AbstractArticleAdapter<T> extends RecyclerView.Adapter<Abs
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AbstractArticleAdapter.ArticleItemViewHolder articleItemViewHolder, int i) {
-        T article = mArticleList.get(i);
+    public void onBindViewHolder(@NonNull final AbstractArticleAdapter.ArticleItemViewHolder articleItemViewHolder, int i) {
+        final T article = mArticleList.get(i);
         bind(articleItemViewHolder, article);
+
+        articleItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnDispatchListener.onItemClick(article);
+            }
+        });
     }
 
     void showImage(Context context, Image image, ImageView intoImageView) {

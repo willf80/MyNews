@@ -3,32 +3,21 @@ package com.appinlab.mynews.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.adapters.AbstractArticleAdapter;
-import com.appinlab.mynews.adapters.ArticleAdapter;
-import com.appinlab.mynews.api.ArticleStreams;
-import com.appinlab.mynews.models.Article;
-import com.appinlab.mynews.models.ResponseData;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public abstract class AbstractArticleFragment<TModel> extends Fragment {
     @BindView(R.id.recyclerView)

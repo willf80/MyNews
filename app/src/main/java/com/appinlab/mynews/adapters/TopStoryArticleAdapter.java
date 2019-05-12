@@ -8,8 +8,8 @@ import java.util.List;
 
 public class TopStoryArticleAdapter extends AbstractArticleAdapter<TopStoryArticle> {
 
-    public TopStoryArticleAdapter(List<TopStoryArticle> articleList) {
-        super(articleList);
+    public TopStoryArticleAdapter(List<TopStoryArticle> articleList, OnDispatchListener<TopStoryArticle> articleOnDispatchListener) {
+        super(articleList, articleOnDispatchListener);
     }
 
     @Override

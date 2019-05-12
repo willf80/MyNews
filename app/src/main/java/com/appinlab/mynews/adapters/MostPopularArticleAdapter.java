@@ -9,8 +9,9 @@ import java.util.List;
 
 public class MostPopularArticleAdapter extends AbstractArticleAdapter<MostPopularArticle> {
 
-    public MostPopularArticleAdapter(List<MostPopularArticle> articleList) {
-        super(articleList);
+    public MostPopularArticleAdapter(List<MostPopularArticle> articleList,
+                                     OnDispatchListener<MostPopularArticle> articleOnDispatchListener) {
+        super(articleList, articleOnDispatchListener);
     }
 
     @Override
