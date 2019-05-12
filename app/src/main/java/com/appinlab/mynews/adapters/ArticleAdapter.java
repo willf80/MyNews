@@ -1,49 +1,28 @@
 package com.appinlab.mynews.adapters;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.appinlab.mynews.R;
 import com.appinlab.mynews.models.Article;
+import com.appinlab.mynews.models.Image;
+import com.appinlab.mynews.utils.DateUtils;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ArticleItemViewHolder> {
-
-    private List<Article> mArticleList;
+public class ArticleAdapter extends AbstractArticleAdapter<Article> {
 
     public ArticleAdapter(List<Article> articleList) {
-        mArticleList = articleList;
-    }
-
-    @NonNull
-    @Override
-    public ArticleItemViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.article_item_view,
-                viewGroup, false);
-        return new ArticleItemViewHolder(view);
+        super(articleList);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticleItemViewHolder articleItemViewHolder, int i) {
+    void bind(AbstractArticleAdapter.ArticleItemViewHolder articleItemViewHolder, Article article) {
+        Image image = getArticleImage(article.getImageList());
+        // Show current article image
+        showImage(articleItemViewHolder.mContext, image, articleItemViewHolder.mImageView);
 
+        articleItemViewHolder.mTitleTextView.setText(article.getTitle());
+        articleItemViewHolder.mSectionTitleTextView.setText(doBreadCrumb(article.getSection(), article.getSubsection()));
+
+        String publishedDate = DateUtils.stringDateFormatted(article.getPublishedDate(), "dd/MM/yy");
+        articleItemViewHolder.mDateTextView.setText(publishedDate);
     }
 
-    @Override
-    public int getItemCount() {
-        return mArticleList.size();
-    }
-
-    class ArticleItemViewHolder extends RecyclerView.ViewHolder {
-
-        ArticleItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
-    }
 }

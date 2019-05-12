@@ -7,30 +7,39 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.appinlab.mynews.R;
+import com.appinlab.mynews.adapters.AbstractArticleAdapter;
 import com.appinlab.mynews.adapters.ArticleAdapter;
+import com.appinlab.mynews.api.ArticleStreams;
 import com.appinlab.mynews.models.Article;
+import com.appinlab.mynews.models.ResponseData;
+import com.appinlab.mynews.models.ResultData;
+import com.appinlab.mynews.models.SearchArticleData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ArticleFragment extends Fragment {
+public class ArticleFragment extends AbstractArticleFragment<Article> {
     private static final String ARG_CATEGORIE_NAME = "categoryName";
 
     private String mCategoryName;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
-
-    ArticleAdapter mArticleAdapter;
-
 
     public ArticleFragment() {
         // Required empty public constructor
@@ -53,24 +62,41 @@ public class ArticleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_article, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+    public AbstractArticleAdapter<Article> setAdapter(@NonNull List<Article> articles) {
+        return new ArticleAdapter(articles);
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        List<Article> articleList = new ArrayList<>();
+    public void loadArticles() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("q", mCategoryName);
+        map.put("sort", "newest");
 
-        for (int i = 0; i < 50; i++) {
-            articleList.add(new Article());
-        }
+        ArticleStreams
+            .getSearchArticles(getContext(), map)
+            .enqueue(new Callback<ResponseData<SearchArticleData>>() {
+                @Override
+                public void onResponse(@NonNull Call<ResponseData<SearchArticleData>> call,
+                                       @NonNull Response<ResponseData<SearchArticleData>> response) {
 
-        mArticleAdapter = new ArticleAdapter(articleList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        mRecyclerView.setAdapter(mArticleAdapter);
+                    if(!response.isSuccessful()) {
+                        Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    // Get data from body
+                    ResponseData<SearchArticleData> articleResponseData = response.body();
+
+                    // If response data is null stop updated
+                    if(articleResponseData == null  || articleResponseData.response == null) return;
+
+                    applyData(articleResponseData.response.getArticleList());
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ResponseData<SearchArticleData>> call,
+                                      @NonNull Throwable t) {
+                }
+            });
     }
 }
