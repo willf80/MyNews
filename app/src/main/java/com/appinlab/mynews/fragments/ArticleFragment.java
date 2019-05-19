@@ -37,8 +37,16 @@ import retrofit2.Response;
 
 public class ArticleFragment extends AbstractArticleFragment<Article> implements AbstractArticleAdapter.OnDispatchListener<Article> {
     private static final String ARG_CATEGORIE_NAME = "categoryName";
+    private static final String ARG_QUERY = "query";
+    private static final String ARG_START_DATE = "startDate";
+    private static final String ARG_END_DATE = "endDate";
+    private static final String ARG_SEARCH_MODE = "searchMode";
 
     private String mCategoryName;
+    private String mQuery;
+    private String mStartDate;
+    private String mEndDate;
+    private boolean isSearchMode = false;
 
     @BindView(R.id.recyclerView)
     RecyclerView mRecyclerView;
@@ -47,10 +55,24 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
         // Required empty public constructor
     }
 
-    public static ArticleFragment newInstance(String category) {
+    public static ArticleFragment newInstance(String filterWithCategoryName) {
         ArticleFragment fragment = new ArticleFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_CATEGORIE_NAME, category);
+        args.putString(ARG_CATEGORIE_NAME, filterWithCategoryName);
+        args.putBoolean(ARG_SEARCH_MODE, false);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static ArticleFragment newInstance(
+            String filterWithCategoriesNames, String query, String startDate, String endDate) {
+        ArticleFragment fragment = new ArticleFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_CATEGORIE_NAME, filterWithCategoriesNames);
+        args.putString(ARG_QUERY, query);
+        args.putString(ARG_START_DATE, startDate);
+        args.putString(ARG_END_DATE, endDate);
+        args.putBoolean(ARG_SEARCH_MODE, true);
         fragment.setArguments(args);
         return fragment;
     }
@@ -58,8 +80,17 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mCategoryName = getArguments().getString(ARG_CATEGORIE_NAME);
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            mCategoryName = bundle.getString(ARG_CATEGORIE_NAME);
+            isSearchMode = bundle.getBoolean(ARG_SEARCH_MODE, false);
+
+            if(!isSearchMode) return;
+
+            mQuery = bundle.getString(ARG_QUERY);
+            mStartDate = bundle.getString(ARG_START_DATE);
+            mEndDate = bundle.getString(ARG_END_DATE);
         }
     }
 
@@ -68,14 +99,32 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
         return new ArticleAdapter(articles, this);
     }
 
-    @Override
-    public void loadArticles() {
+    private Map<String, Object> builQueryMap() {
         Map<String, Object> map = new HashMap<>();
-        map.put("q", mCategoryName);
         map.put("sort", "newest");
 
+        if(!isSearchMode) {
+            map.put("fq", String.format("news_desk:(\"%s\")", mCategoryName));
+        }else {
+            map.put("q", mQuery);
+            map.put("fq", mCategoryName);
+
+            if(mStartDate != null) {
+                map.put("begin_date", mStartDate);
+            }
+
+            if(mEndDate != null) {
+                map.put("end_date", mEndDate);
+            }
+        }
+
+        return map;
+    }
+
+    @Override
+    public void loadArticles() {
         ArticleStreams
-            .getSearchArticles(getContext(), map)
+            .getSearchArticles(getContext(), builQueryMap())
             .enqueue(new Callback<ResponseData<SearchArticleData>>() {
                 @Override
                 public void onResponse(@NonNull Call<ResponseData<SearchArticleData>> call,
@@ -92,6 +141,8 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
                     // If response data is null stop updated
                     if(articleResponseData == null  || articleResponseData.response == null) return;
 
+                    showNotFoundMessage(articleResponseData.response.getArticleList());
+
                     applyData(articleResponseData.response.getArticleList());
                 }
 
@@ -100,6 +151,12 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
                                       @NonNull Throwable t) {
                 }
             });
+    }
+
+    private void showNotFoundMessage(List<Article> articles) {
+        if(isSearchMode && articles.isEmpty()) {
+            Toast.makeText(getContext(), "No articles found !", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

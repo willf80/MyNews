@@ -1,5 +1,6 @@
 package com.appinlab.mynews;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -7,6 +8,7 @@ import android.widget.Toast;
 
 import com.appinlab.mynews.models.SearchArticleParameter;
 import com.appinlab.mynews.views.ArticleFilterView;
+import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +46,10 @@ public class SearchArticleActivity extends BaseActivity {
 
     // Do search and show the result in result search activity
     private void gotoSearch(SearchArticleParameter searchArticleParameter) {
+        String data = new Gson().toJson(searchArticleParameter);
 
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putExtra(SearchResultsActivity.EXTRA_DATA, data);
+        startActivity(intent);
     }
 }

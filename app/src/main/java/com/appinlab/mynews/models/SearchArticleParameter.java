@@ -1,10 +1,11 @@
 package com.appinlab.mynews.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class SearchArticleParameter {
+public class SearchArticleParameter implements Serializable {
     private String mQuery;
     private List<Category> mCategoryList;
     private Date mStartDate;
@@ -68,6 +69,17 @@ public class SearchArticleParameter {
         }
 
         return mQuery != null && !mQuery.isEmpty();
+    }
+
+    public String getCategoryListToFilterQuery() {
+        StringBuilder filter = new StringBuilder("news_desk:(");
+
+        for (Category category : mCategoryList) {
+            filter.append("\"").append(category.getLibelle()).append("\"");
+        }
+        filter.append(")");
+
+        return filter.toString();
     }
 
     public String getQuery() {

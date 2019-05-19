@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".SearchResultsActivity"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name=".ArticleWebViewActivity"
             android:theme="@style/AppTheme" />
         <activity

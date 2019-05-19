@@ -1,6 +1,8 @@
 package com.appinlab.mynews.models;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable {
     private String mLibelle;
     private boolean mChecked;
 
