@@ -1,3 +1,5 @@
+language: android
+jdk: oraclejdk8
 env:
   global:
     - ANDROID_TARGET=android-28
