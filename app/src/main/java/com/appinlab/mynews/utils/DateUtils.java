@@ -35,7 +35,7 @@ public class DateUtils {
         return null;
     }
 
-    public static String parseStringToDate(Date date, String pattern) {
+    public static String parseDateToString(Date date, String pattern) {
         SimpleDateFormat format = new SimpleDateFormat(pattern, Locale.getDefault());
         return format.format(date);
     }

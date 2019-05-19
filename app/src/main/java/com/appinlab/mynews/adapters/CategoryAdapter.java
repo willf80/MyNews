@@ -5,12 +5,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.models.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ArticleCategoryItemViewHolder> {
@@ -19,6 +23,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
 
     public CategoryAdapter(List<Category> categoryList) {
         mCategoryList = categoryList;
+    }
+
+    public List<Category> getCheckedCategories() {
+        List<Category> categoryList = new ArrayList<>();
+
+        for (Category category : mCategoryList) {
+            if (!category.isChecked()) continue;
+            categoryList.add(category);
+        }
+
+        return categoryList;
     }
 
     @NonNull
@@ -30,8 +45,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ArticleCategoryItemViewHolder articleCategoryItemViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ArticleCategoryItemViewHolder articleCategoryItemViewHolder, int i) {
+        final Category category = mCategoryList.get(i);
+        articleCategoryItemViewHolder.mCheckBox.setText(category.getLibelle());
 
+        articleCategoryItemViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                category.setChecked(isChecked);
+                articleCategoryItemViewHolder.mCheckBox.setChecked(isChecked);
+            }
+        });
     }
 
     @Override
@@ -40,6 +64,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
     }
 
     class ArticleCategoryItemViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.checkBox)
+        CheckBox mCheckBox;
 
         ArticleCategoryItemViewHolder(@NonNull View itemView) {
             super(itemView);

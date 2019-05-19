@@ -4,7 +4,7 @@
     android:orientation="vertical">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/queryEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -27,18 +27,16 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="End Date" />
+                android:text="Begin Date" />
 
-            <EditText
-                android:id="@+id/editText4"
+            <TextView
+                android:id="@+id/startDateTextView"
                 style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="none"
                 android:text="21/02/2019"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         </LinearLayout>
@@ -54,15 +52,13 @@
                 android:id="@+id/textView4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Begin Date" />
+                android:text="End Date" />
 
-            <EditText
-                android:id="@+id/editText3"
+            <TextView
+                android:id="@+id/endDateTextView"
                 style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="none"
                 android:text="20/02/2019"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
         </LinearLayout>
