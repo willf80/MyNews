@@ -16,6 +16,16 @@ android:
 licenses:
   - '.+'
 
+install:
+  - gradle wrapper --gradle-version 5.1.1
+
+before_script:
+  - chmod a+x gradlew
+  - chmod a+x gradle/wrapper/gradle-wrapper.jar
+
+script:
+  - gradlew build
+
 #language: android
 #jdk: oraclejdk8
 #env:
