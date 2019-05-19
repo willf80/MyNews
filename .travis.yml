@@ -1,81 +1,58 @@
 language: android
-jdk: oraclejdk8
+
 env:
   global:
-    - ANDROID_TARGET=android-28
-    - ANDROID_BUILD_TOOLS_VERSION=28.0.3
-    -
-android:
-  components:
-    - tools
-    - build-tools-$ANDROID_BUILD_TOOLS_VERSION
-    - $ANDROID_TARGET
-    - extra-google-google_play_services
-    - extra-android-support
-    - extra
-licenses:
-  - '.+'
+    - ADB_INSTALL_TIMEOUT=8
+
+jdk: oraclejdk8
+
+before_install:
+  # Download SDK
+  - yes | sdkmanager "tools" &>/dev/null
+  - yes | sdkmanager "platform-tools" &>/dev/null
+  - yes | sdkmanager "platforms;android-28" &>/dev/null
+  # Download emulator
+  - yes | sdkmanager "platforms;android-21" &>/dev/null
+  - yes | sdkmanager "system-images;android-21;default;x86_64" &>/dev/null
+  # Update remaining dependencies and accept licenses
+  - yes | sdkmanager --update &>/dev/null
+  - yes | sdkmanager --licenses &>/dev/null
+  # Setup emulator
+  - echo "no" | avdmanager create avd -n test -k "system-images;android-21;default;x86_64" -c 200M -f &>/dev/null
+  - $ANDROID_HOME/emulator/emulator -avd test -no-audio -no-accel -no-snapshot -no-window -camera-back none -camera-front none & &>/dev/null
 
 install:
-  - gradle wrapper --gradle-version 5.1.1
+  # Build debug and release(run proguard)
+  - ./gradlew clean ktlintCheck assemble assembleDebugAndroidTest -Pci -s --scan
 
 before_script:
-  - chmod a+x gradlew
-  - chmod a+x gradle/wrapper/gradle-wrapper.jar
+  # Make sure the emulator is available
+  - android-wait-for-emulator
+
+  # Turn off animations
+  - adb shell settings put global window_animation_scale 0 &
+  - adb shell settings put global transition_animation_scale 0 &
+  - adb shell settings put global animator_duration_scale 0 &
+
+  # Wake up
+  - adb shell input keyevent 82 &
 
 script:
-  - gradlew build
+  # Run all checks
+  - ./gradlew testDebug connectedDebugAndroidTest -Pci -s --scan
 
-#language: android
-#jdk: oraclejdk8
-#env:
-#  global:
-#    - ABI="google_apis;armeabi-v7a"
-#    - BUILD_TOOLS_VERSION=28.0.3
-#    - ADB_INSTALL_TIMEOUT=25
-#    - QEMU_AUDIO_DRV=none
-#  matrix:
-#    - EMULATOR_API=16
-#    - EMULATOR_API=19
-#    - EMULATOR_API=21
-#    - EMULATOR_API=24
-##
-##android:
-##  components:
-##    - tools
-##    - platform-tools
-##    - build-tools-28.0.3
-##    - $ANDROID_TARGET
-##    - extra-android-m2repository
-##    - extra-google-m2repository
-##
-##    - sys-img-armeabi-v7a-$ANDROID_TARGET
-#
-#install:
-#  - export ANDROID_HOME=~/android-sdk-linux
-#  - wget -q "https://dl.google.com/android/repository/sdk-tools-linux-4333796.zip" -O android-sdk-tools.zip
-#  - unzip -q android-sdk-tools.zip -d ${ANDROID_HOME}
-#  - rm android-sdk-tools.zip
-#  - PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
-#  - yes | sdkmanager --update
-#  - yes | sdkmanager --licenses
-#  - ./gradlew dependencies || true
-#  - sdkmanager "emulator" "tools" "platform-tools" > /dev/null
-#  - sdkmanager --list | head -20
-#  - sdkmanager "build-tools;$BUILD_TOOLS_VERSION" "platforms;android-$28" > /dev/null
-#  - sdkmanager "system-images;android-$EMULATOR_API;$ABI" > /dev/null
-#  - sdkmanager --list | head -15
-#  - mkdir "$ANDROID_HOME/licenses" || true
-#  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-#  - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
-#
-#before_script:
-#  - echo no | avdmanager create avd --force -n test -k "system-images;android-$EMULATOR_API;$ABI"
-#  - ./gradlew assembleDebugAndroidTest -PdisablePreDex --continue --stacktrace
-#  - $ANDROID_HOME/emulator/emulator -avd test -no-window &
-#  - bash android-wait-for-emulator
-#  - adb shell input keyevent 82
-#
-#script:
-#  - ./gradlew test -PdisablePreDex --stacktrace
-#  - ./gradlew connectedAndroidTest -PdisablePreDex --stacktrace
+branches:
+  except:
+    - gh-pages
+
+sudo: false
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
