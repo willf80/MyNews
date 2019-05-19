@@ -95,12 +95,6 @@ public class ArticleFilterView extends LinearLayout {
         mEndDateTextView.setOnClickListener( view -> showCalendarForEndDate());
     }
 
-    private void setDefaultDate() {
-        Calendar now = Calendar.getInstance();
-        mStartDateTextView.setText(DateUtils.parseDateToString(now.getTime(), datePattern));
-        mEndDateTextView.setText(DateUtils.parseDateToString(now.getTime(), datePattern));
-    }
-
     private void showCalendarForStartDate() {
         Calendar now = Calendar.getInstance();
         new DatePickerDialog(getContext(),
@@ -131,7 +125,6 @@ public class ArticleFilterView extends LinearLayout {
     private void handleDate() {
         if(mShowDate) {
             mDateFilterLayout.setVisibility(VISIBLE);
-            setDefaultDate();
         } else {
             mDateFilterLayout.setVisibility(GONE);
         }
@@ -162,12 +155,21 @@ public class ArticleFilterView extends LinearLayout {
     public SearchArticleParameter getSearchArticleParameters() {
         SearchArticleParameter articleParameter = new SearchArticleParameter();
 
+        String startDateString = mStartDateTextView.getText().toString();
+        String endDateString = mEndDateTextView.getText().toString();
+
+        if(!startDateString.isEmpty()) {
+            articleParameter.setStartDate(
+                    DateUtils.parseStringToDate(mStartDateTextView.getText().toString(), datePattern));
+        }
+
+        if(!endDateString.isEmpty()) {
+            articleParameter.setEndDate(
+                    DateUtils.parseStringToDate(mEndDateTextView.getText().toString(), datePattern));
+        }
+
         articleParameter.setQuery(mQueryEditText.getText().toString());
         articleParameter.setCategoryList(mCategoryAdapter.getCheckedCategories());
-        articleParameter.setStartDate(
-                DateUtils.parseStringToDate(mStartDateTextView.getText().toString(), datePattern));
-        articleParameter.setEndDate(
-                DateUtils.parseStringToDate(mEndDateTextView.getText().toString(), datePattern));
 
         return articleParameter;
     }

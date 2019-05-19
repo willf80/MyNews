@@ -1,5 +1,6 @@
 package com.appinlab.mynews.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class SearchArticleParameter {
     private Date mEndDate;
 
     public SearchArticleParameter() {
+        mCategoryList = new ArrayList<>();
     }
 
     public SearchArticleParameter(String query, List<Category> categoryList) {
@@ -17,12 +19,55 @@ public class SearchArticleParameter {
         mCategoryList = categoryList;
     }
 
+    // Before refactoring
+//    public boolean isValidForSearch() {
+//        if(mCategoryList.size() <= 0) {
+//            return false;
+//        }
+//
+//        if(mQuery != null && !mQuery.isEmpty()) {
+//
+//            if((mStartDate != null && mEndDate != null) && (mStartDate.after(mEndDate))){
+//                return false;
+//            } else {
+//                return true;
+//            }
+//        }
+//
+//        return false;
+//    }
+
     public boolean isValidForSearch() {
+        if(mCategoryList.size() <= 0) {
+            return false;
+        }
+
+        if(mQuery != null && !mQuery.isEmpty()) {
+            return (mStartDate == null || mEndDate == null) || (!mStartDate.after(mEndDate));
+        }
+
         return false;
     }
 
+    // Before refactoring
+//    public boolean isValidForNotification() {
+//        if(mCategoryList.size() <= 0) {
+//            return false;
+//        }
+//
+//        if(mQuery != null && !mQuery.isEmpty()) {
+//            return true;
+//        }
+//
+//        return  false;
+//    }
+
     public boolean isValidForNotification() {
-        return  false;
+        if(mCategoryList.size() <= 0) {
+            return false;
+        }
+
+        return mQuery != null && !mQuery.isEmpty();
     }
 
     public String getQuery() {
