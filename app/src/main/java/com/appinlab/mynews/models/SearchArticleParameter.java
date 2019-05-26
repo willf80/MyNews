@@ -75,7 +75,7 @@ public class SearchArticleParameter implements Serializable {
         StringBuilder filter = new StringBuilder("news_desk:(");
 
         for (Category category : mCategoryList) {
-            filter.append("\"").append(category.getLibelle()).append("\"");
+            filter.append("\"").append(category.getLibelle()).append("\" ");
         }
         filter.append(")");
 

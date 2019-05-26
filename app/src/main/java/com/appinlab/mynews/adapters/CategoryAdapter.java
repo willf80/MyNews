@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.models.Category;
@@ -21,8 +20,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
 
     private List<Category> mCategoryList;
 
+    private OnCategoryDispatchListener mOnCategoryDispatchListener;
+
+    public interface OnCategoryDispatchListener {
+        void onCategoryStateChanged(Category category);
+    }
+
     public CategoryAdapter(List<Category> categoryList) {
         mCategoryList = categoryList;
+    }
+
+    public CategoryAdapter(List<Category> categoryList, OnCategoryDispatchListener onCategoryDispatchListener) {
+        mCategoryList = categoryList;
+        mOnCategoryDispatchListener = onCategoryDispatchListener;
     }
 
     public List<Category> getCheckedCategories() {
@@ -34,6 +44,17 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
         }
 
         return categoryList;
+    }
+
+    public void setCategoryListChecked(List<Category> checkedCategoryList) {
+        for (Category category : mCategoryList) {
+            for (Category checkedItem : checkedCategoryList) {
+                if(!category.getLibelle().equalsIgnoreCase(checkedItem.getLibelle())) continue;
+
+                category.setChecked(true);
+            }
+        }
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -49,11 +70,14 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Articl
         final Category category = mCategoryList.get(i);
         articleCategoryItemViewHolder.mCheckBox.setText(category.getLibelle());
 
-        articleCategoryItemViewHolder.mCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                category.setChecked(isChecked);
-                articleCategoryItemViewHolder.mCheckBox.setChecked(isChecked);
+        articleCategoryItemViewHolder.mCheckBox.setChecked(category.isChecked());
+
+        articleCategoryItemViewHolder.mCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            category.setChecked(isChecked);
+            articleCategoryItemViewHolder.mCheckBox.setChecked(isChecked);
+
+            if(mOnCategoryDispatchListener != null) {
+                mOnCategoryDispatchListener.onCategoryStateChanged(category);
             }
         });
     }

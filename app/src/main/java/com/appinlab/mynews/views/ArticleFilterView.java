@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class ArticleFilterView extends LinearLayout {
+public class ArticleFilterView extends LinearLayout implements CategoryAdapter.OnCategoryDispatchListener {
     final String datePattern = "dd/MM/yyyy";
 
     private boolean mShowDate = false;
@@ -34,6 +34,19 @@ public class ArticleFilterView extends LinearLayout {
     private TextView mStartDateTextView;
     private TextView mEndDateTextView;
     private EditText mQueryEditText;
+
+    private OnDispatchListener mOnDispatchListener;
+
+    @Override
+    public void onCategoryStateChanged(Category category) {
+        if(mOnDispatchListener != null) {
+            mOnDispatchListener.onCategoryListChanged(getSearchArticleParameters());
+        }
+    }
+
+    public interface OnDispatchListener {
+        void onCategoryListChanged(SearchArticleParameter parameter);
+    }
 
     public ArticleFilterView(Context context) {
         super(context);
@@ -48,6 +61,10 @@ public class ArticleFilterView extends LinearLayout {
     public ArticleFilterView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
+    }
+
+    public void setOnDispatchListener(OnDispatchListener onDispatchListener) {
+        mOnDispatchListener = onDispatchListener;
     }
 
     private void loadCategoryList() {
@@ -72,7 +89,7 @@ public class ArticleFilterView extends LinearLayout {
         // Load category list
         loadCategoryList();
 
-        mCategoryAdapter = new CategoryAdapter(mArticleCategories);
+        mCategoryAdapter = new CategoryAdapter(mArticleCategories, this);
 
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recyclerView.setAdapter(mCategoryAdapter);
@@ -158,19 +175,34 @@ public class ArticleFilterView extends LinearLayout {
         String startDateString = mStartDateTextView.getText().toString();
         String endDateString = mEndDateTextView.getText().toString();
 
-        if(!startDateString.isEmpty()) {
-            articleParameter.setStartDate(
-                    DateUtils.parseStringToDate(mStartDateTextView.getText().toString(), datePattern));
-        }
-
-        if(!endDateString.isEmpty()) {
-            articleParameter.setEndDate(
-                    DateUtils.parseStringToDate(mEndDateTextView.getText().toString(), datePattern));
-        }
-
         articleParameter.setQuery(mQueryEditText.getText().toString());
         articleParameter.setCategoryList(mCategoryAdapter.getCheckedCategories());
 
+        if(isShowDate()) {
+            if(!startDateString.isEmpty()) {
+                articleParameter.setStartDate(
+                        DateUtils.parseStringToDate(mStartDateTextView.getText().toString(), datePattern));
+            }
+
+            if(!endDateString.isEmpty()) {
+                articleParameter.setEndDate(
+                        DateUtils.parseStringToDate(mEndDateTextView.getText().toString(), datePattern));
+            }
+        }
+
         return articleParameter;
+    }
+
+    public void setSearchArticleParameter(SearchArticleParameter searchArticleParameter) {
+        if(searchArticleParameter == null) return;
+
+        mQueryEditText.setText(searchArticleParameter.getQuery());
+        if(isShowDate()) {
+            mStartDateTextView.setText(DateUtils.parseDateToString(searchArticleParameter.getStartDate(), datePattern));
+            mEndDateTextView.setText(DateUtils.parseDateToString(searchArticleParameter.getEndDate(), datePattern));
+        }
+
+        // Update categories checkbox state
+        mCategoryAdapter.setCategoryListChecked(searchArticleParameter.getCategoryList());
     }
 }
