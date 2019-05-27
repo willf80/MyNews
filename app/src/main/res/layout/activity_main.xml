@@ -21,6 +21,7 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabMode="scrollable"
             app:tabIndicatorColor="@color/colorYellow500"/>
     </android.support.design.widget.AppBarLayout>
 

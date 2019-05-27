@@ -1,19 +1,19 @@
 package com.appinlab.mynews.adapters;
 
-import com.appinlab.mynews.models.Article;
 import com.appinlab.mynews.models.Image;
+import com.appinlab.mynews.models.TopStoryArticle;
 import com.appinlab.mynews.utils.DateUtils;
 
 import java.util.List;
 
-public class ArticleAdapter extends AbstractArticleAdapter<Article> {
+public class TopStoryArticleAdapter extends AbstractArticleAdapter<TopStoryArticle> {
 
-    public ArticleAdapter(List<Article> articleList, OnDispatchListener<Article> articleOnDispatchListener) {
+    public TopStoryArticleAdapter(List<TopStoryArticle> articleList, OnDispatchListener<TopStoryArticle> articleOnDispatchListener) {
         super(articleList, articleOnDispatchListener);
     }
 
     @Override
-    void bind(AbstractArticleAdapter.ArticleItemViewHolder articleItemViewHolder, Article article) {
+    void bind(AbstractArticleAdapter.ArticleItemViewHolder articleItemViewHolder, TopStoryArticle article) {
         Image image = getArticleImage(article.getImageList());
         // Show current article image
         showImage(articleItemViewHolder.mContext, image, articleItemViewHolder.mImageView);

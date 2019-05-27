@@ -4,24 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Article {
+public class MostPopularArticle {
 
-    @SerializedName("section_name")
     private String section;
 
     private String subsection;
 
-    @SerializedName("snippet")
     private String title;
 
-    @SerializedName("web_url")
     private String url;
 
-    @SerializedName("pub_date")
+    @SerializedName("published_date")
     private String publishedDate;
 
-    @SerializedName("multimedia")
-    private List<Image> imageList;
+    @SerializedName("media")
+    private List<Media> mediaList;
 
     public String getSection() {
         return section;
@@ -63,11 +60,11 @@ public class Article {
         this.publishedDate = publishedDate;
     }
 
-    public List<Image> getImageList() {
-        return imageList;
+    public List<Media> getMediaList() {
+        return mediaList;
     }
 
-    public void setImageList(List<Image> imageList) {
-        this.imageList = imageList;
+    public void setMediaList(List<Media> mediaList) {
+        this.mediaList = mediaList;
     }
 }

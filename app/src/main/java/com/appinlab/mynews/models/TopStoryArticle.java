@@ -4,20 +4,17 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Article {
+public class TopStoryArticle {
 
-    @SerializedName("section_name")
     private String section;
 
     private String subsection;
 
-    @SerializedName("snippet")
     private String title;
 
-    @SerializedName("web_url")
     private String url;
 
-    @SerializedName("pub_date")
+    @SerializedName("published_date")
     private String publishedDate;
 
     @SerializedName("multimedia")

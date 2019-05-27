@@ -6,10 +6,17 @@
 
     <string name="tab_name_top_stories">Top stories</string>
     <string name="tab_name_most_popular">Most popular</string>
-    <string name="tab_name_business">Business</string>
 
     <string name="menu_item_notifications">Notifications</string>
     <string name="menu_item_help">Help</string>
     <string name="menu_item_about">About</string>
     <string name="menu_item_search">Search</string>
+
+    <string name="api_base_url">https://api.nytimes.com/svc/</string>
+    <string name="image_base_url">https://static01.nyt.com/</string>
+    <string name="api_key">PoAqmDcYIHkJ8wZVGC3JyouDobxayfZU</string>
+
+    <string name="channel_name">myNews</string>
+    <string name="channel_description">Show news notifications</string>
+
 </resources>
