@@ -25,12 +25,13 @@ public class SearchResultsActivity extends BaseActivity {
         SearchArticleParameter searchArticleParameter =
                 new Gson().fromJson(data, SearchArticleParameter.class);
 
-        // If deserializable is failed exit
+        // If deserializable failed then exit
         if(searchArticleParameter == null) {
             finish();
             return;
         }
 
+        // Show the title
         setTitle(String.format("Search : %s", searchArticleParameter.getQuery()));
 
         initFragment(searchArticleParameter);
@@ -44,7 +45,7 @@ public class SearchResultsActivity extends BaseActivity {
             startDate = DateUtils.parseDateToString(searchArticleParameter.getStartDate(), "yyyyMMdd");
         }
 
-        if(searchArticleParameter.getStartDate() != null) {
+        if(searchArticleParameter.getEndDate() != null) {
             endDate = DateUtils.parseDateToString(searchArticleParameter.getEndDate(), "yyyyMMdd");
         }
 

@@ -8,6 +8,9 @@ import android.webkit.WebView;
 
 public class ArticleWebViewActivity extends BaseActivity {
 
+    public final static String EXTRA_URL = "url";
+    public final static String EXTRA_TITLE = "title";
+
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,8 +18,8 @@ public class ArticleWebViewActivity extends BaseActivity {
         setContentView(R.layout.activity_article_web_view);
         showReturnHome();
 
-        String url = getIntent().getStringExtra("url");
-        String title = getIntent().getStringExtra("title");
+        String url = getIntent().getStringExtra(EXTRA_URL);
+        String title = getIntent().getStringExtra(EXTRA_TITLE);
 
         setTitle(title);
 

@@ -4,14 +4,8 @@ package com.appinlab.mynews.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.appinlab.mynews.ArticleWebViewActivity;
@@ -21,16 +15,13 @@ import com.appinlab.mynews.adapters.ArticleAdapter;
 import com.appinlab.mynews.api.ArticleStreams;
 import com.appinlab.mynews.models.Article;
 import com.appinlab.mynews.models.ResponseData;
-import com.appinlab.mynews.models.ResultData;
 import com.appinlab.mynews.models.SearchArticleData;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -155,15 +146,23 @@ public class ArticleFragment extends AbstractArticleFragment<Article> implements
 
     private void showNotFoundMessage(List<Article> articles) {
         if(isSearchMode && articles.isEmpty()) {
-            Toast.makeText(getContext(), "No articles found !", Toast.LENGTH_LONG).show();
+            createNotFoundDialog();
         }
+    }
+
+    private void createNotFoundDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle("Search")
+                .setMessage("No articles found !")
+                .setNegativeButton("OK", null)
+                .show();
     }
 
     @Override
     public void onItemClick(Article article) {
         Intent intent = new Intent(getContext(), ArticleWebViewActivity.class);
-        intent.putExtra("url", article.getUrl());
-        intent.putExtra("title", article.getTitle());
+        intent.putExtra(ArticleWebViewActivity.EXTRA_URL, article.getUrl());
+        intent.putExtra(ArticleWebViewActivity.EXTRA_TITLE, article.getTitle());
         startActivity(intent);
     }
 }

@@ -39,9 +39,6 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         mContext = context;
-        Log.i("NotificationReceiver", "test");
-        Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
-
         searchArticleParameter = SearchArticleUtils.getParameterFromSharedPreferences(mContext);
         doSearch();
     }
