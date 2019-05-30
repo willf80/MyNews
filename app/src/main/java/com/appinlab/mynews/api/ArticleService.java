@@ -1,6 +1,5 @@
 package com.appinlab.mynews.api;
 
-import com.appinlab.mynews.models.Article;
 import com.appinlab.mynews.models.MostPopularArticle;
 import com.appinlab.mynews.models.ResponseData;
 import com.appinlab.mynews.models.ResultData;
