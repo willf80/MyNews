@@ -10,8 +10,6 @@ import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.appinlab.mynews.R;
 import com.appinlab.mynews.SearchResultsActivity;
@@ -96,7 +94,7 @@ public class NotificationAlarmReceiver extends BroadcastReceiver {
         // Activity shown were user clicked on notification
         Intent intent = new Intent(mContext, SearchResultsActivity.class);
         intent.putExtra(SearchResultsActivity.EXTRA_DATA, data);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(mContext, 0, intent, 0);
 

@@ -26,7 +26,7 @@ import com.appinlab.mynews.utils.CategoryUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, TabLayout.BaseOnTabSelectedListener {
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mViewPager.setAdapter(mTabsPagerAdapter);
 
         mTabLayout.setupWithViewPager(mViewPager);
+
+        mTabLayout.addOnTabSelectedListener(this);
     }
 
     // Configure Drawer Layout
@@ -153,6 +155,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        // Check navigation menu item when tab is selected
+        mNavigationView.getMenu()
+                .getItem(tab.getPosition())
+                .setChecked(true);
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     // Tabs pager adapter
