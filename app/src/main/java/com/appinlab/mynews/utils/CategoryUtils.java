@@ -1,8 +1,6 @@
 package com.appinlab.mynews.utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
